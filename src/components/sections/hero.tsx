@@ -13,7 +13,7 @@ export function Hero() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden bg-navy-radial pt-20">
+    <section id="hero" className="relative min-h-hero flex items-center overflow-hidden bg-navy-radial pt-20">
       {/* Background image */}
       <div className="absolute inset-0">
         <img
@@ -110,28 +110,29 @@ export function Hero() {
 
 function OrbitalDiagram() {
   const nodes = ecosystemNodes;
-  const radius = 150; // px from center
+  const radius = 33; // percentage of container — matches SVG viewBox 0 0 100 100
 
   return (
-    <div className="relative w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] lg:w-[460px] lg:h-[460px]">
+    <div className="relative w-[300px] h-[300px] xs:w-[320px] xs:h-[320px] sm:w-[400px] sm:h-[400px] lg:w-[460px] lg:h-[460px]">
       {/* Rotating rings */}
       <div className="absolute inset-8 rounded-full border border-gold/15" />
       <div className="absolute inset-16 rounded-full border border-teal/15 animate-orbit" style={{ borderTopColor: "rgba(44,156,142,0.4)", borderRightColor: "rgba(44,156,142,0.15)" }} />
       <div className="absolute inset-24 rounded-full border border-gold/10 animate-orbit-reverse" style={{ borderBottomColor: "rgba(212,175,55,0.4)" }} />
 
-      {/* Connecting lines (SVG) */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 460 460" fill="none">
+      {/* Connecting lines (SVG, percentage-based so lines always reach the nodes) */}
+      <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none">
         {nodes.map((_, i) => {
           const angle = (i / nodes.length) * Math.PI * 2 - Math.PI / 2;
-          const x = 230 + radius * Math.cos(angle);
-          const y = 230 + radius * Math.sin(angle);
+          const x = 50 + radius * Math.cos(angle);
+          const y = 50 + radius * Math.sin(angle);
           return (
             <line
               key={i}
-              x1="230" y1="230" x2={x} y2={y}
+              x1="50" y1="50" x2={x} y2={y}
               stroke="rgba(212,175,55,0.18)"
-              strokeWidth="1"
-              strokeDasharray="3 4"
+              strokeWidth="0.35"
+              strokeDasharray="1.2 1.6"
+              vectorEffect="non-scaling-stroke"
             />
           );
         })}
@@ -141,9 +142,9 @@ function OrbitalDiagram() {
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
         <div className="relative">
           <div className="absolute inset-0 rounded-full bg-gold/20 blur-xl" />
-          <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-full bg-gradient-to-br from-navy-light to-navy-deep border-2 border-gold flex flex-col items-center justify-center shadow-2xl shadow-gold/20">
-            <img src="/logo-sindo.png" alt="Sindo" className="h-9 w-9 object-contain" />
-            <span className="font-serif font-bold text-gold text-sm mt-0.5">SINDO</span>
+          <div className="relative h-20 w-20 xs:h-24 xs:w-24 sm:h-28 sm:w-28 rounded-full bg-gradient-to-br from-navy-light to-navy-deep border-2 border-gold flex flex-col items-center justify-center shadow-2xl shadow-gold/20">
+            <img src="/logo-sindo.png" alt="Sindo" className="h-8 w-8 xs:h-9 xs:w-9 sm:h-10 sm:w-10 object-contain" />
+            <span className="font-serif font-bold text-gold text-xs sm:text-sm mt-0.5">SINDO</span>
           </div>
         </div>
       </div>
@@ -151,8 +152,8 @@ function OrbitalDiagram() {
       {/* Nodes */}
       {nodes.map((node, i) => {
         const angle = (i / nodes.length) * Math.PI * 2 - Math.PI / 2;
-        const left = `calc(50% + ${radius * Math.cos(angle)}px)`;
-        const top = `calc(50% + ${radius * Math.sin(angle)}px)`;
+        const left = `calc(50% + ${radius * Math.cos(angle)}%)`;
+        const top = `calc(50% + ${radius * Math.sin(angle)}%)`;
         return (
           <motion.div
             key={node.name}
@@ -162,11 +163,11 @@ function OrbitalDiagram() {
             className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
             style={{ left, top }}
           >
-            <div className="group flex flex-col items-center gap-1.5 cursor-default">
-              <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-navy-light/80 backdrop-blur border border-gold/30 flex items-center justify-center shadow-lg group-hover:border-gold group-hover:shadow-gold/30 transition-all">
+            <div className="group flex flex-col items-center gap-1 cursor-default">
+              <div className="h-11 w-11 xs:h-12 xs:w-12 sm:h-14 sm:w-14 rounded-full bg-navy-light/80 backdrop-blur border border-gold/30 flex items-center justify-center shadow-lg group-hover:border-gold group-hover:shadow-gold/30 transition-all">
                 <Icon name={node.icon} className="h-5 w-5 sm:h-6 sm:w-6 text-gold" />
               </div>
-              <span className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wide text-white/80 text-center max-w-[80px] leading-tight bg-navy-deep/60 px-1.5 py-0.5 rounded">
+              <span className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wide text-white/80 text-center max-w-[72px] sm:max-w-[80px] leading-tight bg-navy-deep/60 px-1.5 py-0.5 rounded">
                 {node.name}
               </span>
             </div>

@@ -5,6 +5,7 @@ import { structure } from "@/lib/sindo-data";
 import { SectionHeading } from "@/components/section-heading";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import type { Bi } from "@/lib/sindo-data";
 
 const accentMap: Record<string, { ring: string; bg: string; text: string; dot: string }> = {
   gold: { ring: "border-gold/40", bg: "bg-gold/10", text: "text-gold-dark", dot: "bg-gold" },
@@ -16,15 +17,45 @@ const accentMap: Record<string, { ring: string; bg: string; text: string; dot: s
 export function Structure() {
   const { t, lang } = useLang();
   const fns = structure.functions;
-  const radius = 38; // percentage
+  const radius = 34; // percentage (safe margin against card overflow)
 
   return (
-    <section id="struktur" className="section-pad relative bg-background">
+    <section id="struktur" className="section-pad relative bg-background overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading eyebrow={structure.eyebrow} title={structure.title} />
 
-        {/* Radial diagram */}
-        <div className="mt-14 relative mx-auto w-full max-w-3xl aspect-square">
+        {/* Mobile / tablet: compact identity banner + card grid */}
+        <div className="mt-10 md:hidden">
+          <div className="mx-auto max-w-md rounded-2xl bg-navy-radial p-5 text-center text-white accent-top-gold">
+            <img
+              src="/logo-sindo.png"
+              alt="Sindo"
+              className="mx-auto h-12 w-12 object-contain"
+            />
+            <div className="mt-2 font-serif font-bold text-gold text-base leading-snug">
+              {structure.center}
+            </div>
+          </div>
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {fns.map((fn, i) => {
+              const a = accentMap[fn.accent] ?? accentMap.gold;
+              return (
+                <motion.div
+                  key={fn.name}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, delay: (i % 2) * 0.08 }}
+                >
+                  <FunctionCard fn={fn} accent={a} t={t} lang={lang} />
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Radial diagram (md and up) */}
+        <div className="mt-14 relative mx-auto w-full max-w-3xl aspect-square hidden md:block">
           {/* SVG connectors */}
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" fill="none" preserveAspectRatio="xMidYMid meet">
             {fns.map((_, i) => {
@@ -63,21 +94,52 @@ export function Structure() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 110 }}
-                className="absolute z-10 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[180px]"
+                className="absolute z-10 -translate-x-1/2 -translate-y-1/2 w-[168px] lg:w-[180px]"
                 style={{ left, top }}
               >
-                <div className={cn("rounded-xl bg-white border-2 p-3 shadow-lg hover:shadow-xl transition-shadow", a.ring)}>
-                  <div className={cn("inline-flex h-2 w-2 rounded-full mb-1.5", a.dot)} />
-                  <div className="font-serif font-bold text-[12px] sm:text-sm text-navy leading-tight">{fn.name}</div>
-                  <div className="text-[9px] uppercase tracking-wide text-muted-foreground mt-0.5">{lang === "id" ? fn.nameEn : fn.name}</div>
-                  <div className={cn("mt-2 text-[11px] font-semibold", a.text)}>{fn.entity}</div>
-                  <p className="mt-1.5 text-[10px] leading-snug text-foreground/60">{t(fn.desc)}</p>
-                </div>
+                <FunctionCard fn={fn} accent={a} t={t} lang={lang} compact />
               </motion.div>
             );
           })}
         </div>
       </div>
     </section>
+  );
+}
+
+type Fn = (typeof structure.functions)[number];
+type Accent = { ring: string; bg: string; text: string; dot: string };
+type TFn = (b: Bi | string) => string;
+
+function FunctionCard({
+  fn,
+  accent,
+  t,
+  lang,
+  compact = false,
+}: {
+  fn: Fn;
+  accent: Accent;
+  t: TFn;
+  lang: string;
+  compact?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-xl bg-white border-2 p-3 shadow-lg hover:shadow-xl transition-shadow h-full",
+        accent.ring
+      )}
+    >
+      <div className={cn("inline-flex h-2 w-2 rounded-full mb-1.5", accent.dot)} />
+      <div className={cn("font-serif font-bold text-navy leading-tight", compact ? "text-sm" : "text-[13px] sm:text-sm")}>
+        {fn.name}
+      </div>
+      <div className="text-[9px] uppercase tracking-wide text-muted-foreground mt-0.5">
+        {lang === "id" ? fn.nameEn : fn.name}
+      </div>
+      <div className={cn("mt-2 text-[11px] font-semibold", accent.text)}>{fn.entity}</div>
+      <p className="mt-1.5 text-[10px] leading-snug text-foreground/60">{t(fn.desc)}</p>
+    </div>
   );
 }

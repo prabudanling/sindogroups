@@ -37,7 +37,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
+        "fixed top-0 inset-x-0 z-50 transition-all duration-300 pt-safe",
         scrolled
           ? "bg-navy-deep/95 backdrop-blur-md shadow-lg shadow-black/20 border-b border-gold/15"
           : "bg-transparent"
@@ -116,7 +116,7 @@ export function Navbar() {
           open ? "max-h-[80vh]" : "max-h-0"
         )}
       >
-        <div className="px-4 py-4 space-y-1 max-h-[75vh] overflow-y-auto custom-scroll">
+        <div className="px-4 py-4 pb-safe space-y-1 max-h-[75vh] overflow-y-auto custom-scroll touch-scroll">
           {navLinks.map((l) => (
             <button
               key={l.id}

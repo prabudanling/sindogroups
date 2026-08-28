@@ -65,7 +65,7 @@ export function Footer() {
                 <Mail className="h-4 w-4 text-gold/70 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   {company.emails.map((em) => (
-                    <a key={em} href={`mailto:${em}`} className="block text-white/60 hover:text-gold transition-colors break-all">{em}</a>
+                    <a key={em} href={`mailto:${em}`} className="block text-white/60 hover:text-gold transition-colors break-words [overflow-wrap:anywhere]">{em}</a>
                   ))}
                 </div>
               </li>

@@ -79,7 +79,7 @@ export function Chatbot() {
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 200, damping: 18 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-5 right-5 z-50 group"
+            className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-50 group"
             aria-label="Open SINDO Assistant"
           >
             <span className="absolute inset-0 rounded-full bg-gold/40 animate-ping opacity-60" style={{ animationDuration: "2.5s" }} />
@@ -105,10 +105,10 @@ export function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 220, damping: 24 }}
-            className="fixed bottom-0 right-0 sm:bottom-5 sm:right-5 z-50 w-full sm:w-[400px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] flex flex-col bg-white sm:rounded-2xl shadow-2xl border border-gold/20 overflow-hidden"
+            className="fixed bottom-0 right-0 sm:bottom-[calc(1.25rem+env(safe-area-inset-bottom))] sm:right-[calc(1.25rem+env(safe-area-inset-right))] z-50 w-full sm:w-[400px] chat-panel-h sm:h-[600px] sm:max-h-[85vh] flex flex-col bg-white sm:rounded-2xl shadow-2xl border border-gold/20 overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-navy-radial px-4 py-3.5 flex items-center justify-between shrink-0">
+            <div className="bg-navy-radial px-4 py-3.5 pt-[calc(0.875rem+env(safe-area-inset-top))] sm:pt-3.5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="h-10 w-10 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
@@ -134,7 +134,7 @@ export function Chatbot() {
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scroll p-4 space-y-3 bg-cream/40">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scroll touch-scroll p-4 space-y-3 bg-cream/40">
               {messages.length === 0 && (
                 <div className="text-center py-4">
                   <div className="mx-auto h-14 w-14 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mb-3">
@@ -196,7 +196,7 @@ export function Chatbot() {
             </div>
 
             {/* Input */}
-            <div className="p-3 border-t border-border bg-white shrink-0">
+            <div className="p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] border-t border-border bg-white shrink-0">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -214,8 +214,10 @@ export function Chatbot() {
                     }
                   }}
                   rows={1}
+                  enterKeyHint="send"
+                  autoComplete="off"
                   placeholder={t("Tulis pesan...", "Type a message...")}
-                  className="flex-1 resize-none max-h-24 px-3.5 py-2.5 rounded-xl border border-input bg-cream/50 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40"
+                  className="flex-1 resize-none max-h-24 px-3.5 py-2.5 rounded-xl border border-input bg-cream/50 text-base md:text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40"
                 />
                 <button
                   type="submit"

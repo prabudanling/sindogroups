@@ -37,3 +37,23 @@ Stage Summary:
 - Logo is now transparent PNG emblem that blends perfectly with dark and light backgrounds
 - Original source preserved at /home/z/sindogroups-temp/upload/logo-sindo-groups.png
 - Processing script kept at scripts/clean-logo.ts for reproducibility
+
+---
+Task ID: 3
+Agent: Z.ai Code (main)
+Task: Full responsiveness audit + fixes for mobile web & iOS
+
+Work Log:
+- Audited all components at 360/390/768/1280px with agent-browser; detected broken structure section (cards clipped at -20px left / 372px right at 360px, overlapping center), hero orbital SVG/node mismatch (fixed-px viewBox 460 vs px-offset nodes on 320-400px containers), missing iOS viewport-fit, 14px chat textarea (iOS auto-zoom), no safe-area handling
+- structure.tsx: radial diagram now md+ only (radius 38%→34%, cards 168/180px, section overflow-hidden); below md shows identity banner + 1/2-col card grid via shared FunctionCard component
+- hero.tsx: orbital switched to percentage-based positioning (viewBox 0 0 100 100, preserveAspectRatio=none, vectorEffect non-scaling-stroke, radius 33%) so connector lines always reach nodes at any container size; container 300px <400px, center circle/nodes scaled down on small screens
+- globals.css: breakpoint xs=400px; -webkit-text-size-adjust 100%; tap-highlight transparent; pointer:coarse input/textarea/select 16px (iOS anti-zoom); overscroll-behavior; .min-h-hero (100vh→100svh fallback), .chat-panel-h (100vh→100dvh fallback), .pt-safe/.pb-safe/.px-safe (env safe-area-inset), .touch-scroll (momentum + contain)
+- layout.tsx: added Viewport export (viewportFit cover, themeColor #081728)
+- navbar.tsx: pt-safe on fixed header, pb-safe in mobile menu scroll area
+- chatbot.tsx: FAB + panel positioned with safe-area insets, panel header/input safe-area padding, textarea text-base md:text-sm, enterKeyHint=send, touch-scroll on messages
+- contact.tsx + footer.tsx: email links break-words + overflow-wrap anywhere
+- Verified: 0 horizontal overflow at 320/360/390/768/844(landscape)/1280; structure grid clean at 360; radial clean at 768+1280; orbital lines connected at all sizes; mobile menu open/navigate/close OK; chat panel full-screen OK; lint clean; no runtime errors
+
+Stage Summary:
+- Website is now fully responsive from 320px legacy iPhones to wide desktop, with iOS-specific hardening (safe areas, svh/dvh, anti-zoom inputs, tap highlight, text-size-adjust)
+- All sections verified visually at 6 viewport profiles; golden paths (menu nav, chat, form) still functional

@@ -9,6 +9,8 @@
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
   --font-mono: var(--font-geist-mono);
+  /* extra breakpoint for large phones / small phablets */
+  --breakpoint-xs: 400px;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -128,10 +130,32 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    /* iOS: stop automatic text inflation when rotating to landscape */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-inter), system-ui, sans-serif;
+    /* safer, nicer scrolling behaviour on touch devices */
+    overscroll-behavior-y: none;
+  }
+  /* Remove grey flash box on taps (iOS/Android) */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Prevent iOS Safari auto-zoom when focusing form controls (<16px triggers zoom).
+     Applied only for coarse pointers so desktop look is unchanged. */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+  img {
+    /* avoid long-press drag ghost / selection on touch */
+    -webkit-touch-callout: default;
   }
   ::selection {
     background-color: var(--gold);
@@ -271,6 +295,34 @@
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 175, 55, 0.7);
+}
+
+/* ===== iOS / Mobile helpers ===== */
+/* Full-height hero with correct behaviour on iOS Safari (address bar) */
+.min-h-hero {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+/* Full-height chat panel on mobile with fallback for older iOS */
+.chat-panel-h {
+  height: 100vh;
+  height: 100dvh;
+}
+/* Safe-area padding helpers (notch / home indicator) */
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+/* Momentum scrolling for chat & menus on iOS */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 /* Marquee */

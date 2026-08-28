@@ -91,7 +91,7 @@ export function Contact() {
                   <Mail className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
                     {company.emails.map((em) => (
-                      <a key={em} href={`mailto:${em}`} className="block text-white/75 hover:text-gold transition-colors break-all">{em}</a>
+                      <a key={em} href={`mailto:${em}`} className="block text-white/75 hover:text-gold transition-colors break-words [overflow-wrap:anywhere]">{em}</a>
                     ))}
                   </div>
                 </li>
