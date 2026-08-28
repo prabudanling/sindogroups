@@ -57,3 +57,18 @@ Work Log:
 Stage Summary:
 - Website is now fully responsive from 320px legacy iPhones to wide desktop, with iOS-specific hardening (safe areas, svh/dvh, anti-zoom inputs, tap highlight, text-size-adjust)
 - All sections verified visually at 6 viewport profiles; golden paths (menu nav, chat, form) still functional
+
+---
+Task ID: 4
+Agent: Z.ai Code (main)
+Task: Create a world-class README.md for Sindo Groups project
+
+Work Log:
+- Gathered project facts: package.json (deps/scripts), prisma schema, API routes (chat/contact), language-context, layout metadata, theme colors (navy/gold), sections list (14), scripts/clean-logo.ts
+- Wrote README.md (564 lines, Bahasa Indonesia) with: centered logo header, 6 tech badges, quick-nav links, feature table (9 highlights), 14-section sitemap with anchors, tech stack rationale, quick start (Bun + Node fallback), project tree with annotations, full API docs (request/response examples + error codes), DB schema + sqlite3 query tip, bilingual system guide + 3rd-language recipe, responsive/iOS hardening table (safe-area, svh/dvh, anti-zoom), design system (color tokens, fonts, CSS utilities), logo pipeline docs, npm scripts table, deployment guides (Vercel + VPS pm2/nginx), contribution flow, license, company contact block
+- Fixed 2 typos post-write (Bun badge URL "runt|me"→"runtime", "Demolwn"→"Panduan Cepat")
+- Verified: no leftover typos, all badge URLs valid, relative logo path works on GitHub
+
+Stage Summary:
+- README.md now documents the entire project: features, architecture, APIs, DB, i18n, responsiveness, design system, deployment
+- Logo renders in README via relative path public/logo-sindo.png (transparent emblem)
